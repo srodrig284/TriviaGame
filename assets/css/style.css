@@ -1,0 +1,121 @@
+
+@import url('https://fonts.googleapis.com/css?family=Roboto+Slab');
+
+html, body
+{
+    width: 100%;
+    height: 100%;
+}
+
+body{
+    font-family: 'Roboto Slab', serif;
+}
+
+.container-background {
+    width: 100%;
+    min-height: 100%;
+    max-width: 100%;
+    background-image: url('../images/DPbackground.jpg');
+    background-size: cover;
+}
+
+.image-area{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.game-area {
+    min-height: 100%;
+    height: auto;
+    max-width: 80%;
+    margin: 0 auto;
+}
+
+.game-back {
+    background-color: black;
+}
+
+.top_spacing{
+    height: 300px;
+}
+
+.question-text, .blurb-text {
+    text-align: center;
+    font-size: 25px;
+    margin: 20px;
+}
+
+.question-text{
+    color: white;
+}
+.blurb-text{
+    color: yellow;
+}
+.btn-default {
+    width: 100%;
+    background-color: #faebd7;
+    font-size: 15px;
+    color: black;
+}
+
+
+.title_style{
+    margin-top: 222px;
+    margin-left:275px;
+}
+
+#start-btn{
+    width: 50%;
+    font-size: 3em;
+    border: solid;
+    margin-top: 100px;
+    margin-left: 200px;
+    color: black;
+    background-color: #8a0520;
+    border-color: bisque;
+    text-decoration: none;
+}
+
+#start-btn:hover {
+    background-color: #e61459;
+    -webkit-transition: background 0.3s ease-in-out;
+    -moz-transition: background 0.3s ease-in-out;
+    transition: background-color 0.3s ease-in-out;
+}
+
+
+
+.absolute {
+    position: absolute;
+    left: -30px;
+    bottom: 0;
+    width: 250px;
+    padding: 20px;
+    background: #999;
+    margin: 0 auto;
+    text-align: center;
+}
+
+
+.status-style{
+    font-size: 1.5em;
+    color: white;
+}
+
+
+.row{
+    width: auto;
+}
+
+.btn-group-vertical{
+    display: inline;
+}
+
+
+.letter-button-color{
+    color: #f5f5f5;
+    background-color: black;
+    margin: 10px 0 10px 0;
+    font-size: 20px;
+    border-color: darkred;
+}
