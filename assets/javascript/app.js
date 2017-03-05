@@ -30,7 +30,7 @@ $(document).ready(function(){
             question: "In the movie 'Deadpool', the title character crosses the barrier between character and audience.  What is the term for this imagined barrier?",
             answers: ["the fourth wall", "the audience barrier", "the character wall", "the character barrier"],
             correct: "the fourth wall",
-            blurb: "The imagined barrier that the character Deadpool frequently breaks by engagin with the audience is called 'the fourth wall'.",
+            blurb: "The imagined barrier that the character Deadpool frequently breaks by engaging with the audience is called 'the fourth wall'.",
             image: "tank-t-34-152-211353.png"
         }, {
             question: "Which character is the primary villain in the movie 'Deadpool'?",
@@ -57,7 +57,7 @@ $(document).ready(function(){
             blurb: "Blind Al is Wade Wilson's roommate",
             image: 'tank-t-34-152-211353.png'
         }, {
-            question: "In the moview 'Deadpool' what age does the title character say he wants to reach before dying?",
+            question: "In the movie 'Deadpool' what age does the title character say he wants to reach before dying?",
             answers: ["92", "102", "82", "94"],
             correct: "102",
             blurb: "The title character wants to be 102 before he dies.",
@@ -130,7 +130,7 @@ $(document).ready(function(){
             image: 'tank-t-34-152-211353.png'
         }, {
             question: "What is the name of the bar where the 'Deadpool' character Wade Wilson meets Weasel?",
-            answers: ["Sister Margaret's Home for Wayward Girls", "Dnager Room", "Prairie City Saloon", "Dead Zone"],
+            answers: ["Sister Margaret's Home for Wayward Girls", "Danger Room", "Prairie City Saloon", "Dead Zone"],
             correct: "Sister Margaret's Home for Wayward Girls",
             blurb: "Wade Wilson meets the character Weasel at a bar called Sister Margaret's Home for Wayward Girls",
             image: 'tank-t-34-152-211353.png'
@@ -170,12 +170,11 @@ $(document).ready(function(){
 	/* Beginning of the game object */
 	var triviaGame = {
 		timer: 0,
-		numberOfQuestions: 10,
+		numberOfQuestions: 2,
 		currentquestion: 1,
         intervalID: 0,
         correct_answers: 0,
         current_corect_answer:"",
-
 
 
 		startNewGame: function(){
@@ -184,7 +183,7 @@ $(document).ready(function(){
 			this.currentquestion = 1;
 
 			// Randomize the array and pick 10 questions
-			this.getRandomArray();
+			triviaGame.getRandomArray();
 
             // set initial values
             // remove the start button
@@ -222,14 +221,14 @@ $(document).ready(function(){
             // add next/restart button
             $("<button>")
                 .attr('type', 'button')
-                .addClass('btn btn-primary ')
+                .addClass('btn btn-primary status-style letter-button-color')
                 .hide()
                 .appendTo('.game-control');
 
             // add buttons for answer choices
-            this.buildButtons();
+            triviaGame.buildButtons();
             // display the question
-            this.displayQuestion();
+            triviaGame.displayQuestion();
 
             // give them a 5 seconds to read question, then
             // display choices and then start timer
@@ -237,6 +236,49 @@ $(document).ready(function(){
                 triviaGame.displayChoices();
             }, 5 * 1000);
 		},
+
+        restartGame: function(){
+            questionsArray = [];  // reset
+            triviaGame.correct_answers = 0;
+            triviaGame.currentquestion = 1;
+
+            // Randomize the array and pick 10 questions
+            triviaGame.getRandomArray();
+
+            // remove the start button
+            $("#start-btn").remove();
+
+            //***********************************//
+            //* Begin setting up the game area  *//
+            //***********************************//
+            $(".questions-left .status-style")
+                .html("Question:  " + triviaGame.currentquestion + " of " + triviaGame.numberOfQuestions);
+
+            $(".score .status-style")
+                .html("Correct: " + triviaGame.correct_answers);
+
+            // show question mark image
+            $("#qm_image").show();
+            // hide game image
+            $("#game_images").hide();
+            // hide blurb
+            $(".blurb-text").hide();
+            // hide restart button
+            $('.game-control .btn').hide(); // hide this button
+
+            $(".choices-Area").empty(); // clear the answer choices area
+
+            // add buttons for answer choices
+            triviaGame.buildButtons();
+            // display the question
+            triviaGame.displayQuestion();
+
+            // give them a 5 seconds to read question, then
+            // display choices and then start timer
+            setTimeout(function (){
+                triviaGame.displayChoices();
+            }, 5 * 1000);
+        },
 
 		getRandomArray: function(){
 			// Randomize the order of questions array
@@ -260,7 +302,7 @@ $(document).ready(function(){
 
 
         displayQuestion: function(){
-            $(".question-text").text(questionsArray[arrayIndex].question);
+            $(".question-text").text(questionsArray[arrayIndex].question).show();
         },
 
         displayChoices: function(){
@@ -302,33 +344,39 @@ $(document).ready(function(){
 
             if(this.textContent === questionsArray[arrayIndex].correct){
                 // display the clapping image
-                $("#game_images")
-                    .attr("src", "assets/images/clap.gif");
                 $("#qm_image").hide();
+                $("#game_images")
+                    .attr("src", "assets/images/clap.gif")
+                    .show();
                 // display the blurb about the answer
-                $(".blurb-text").text(questionsArray[arrayIndex].blurb);
                 $(".question-text").hide();
-                this.correct_answers++;
+                $(".blurb-text")
+                    .text(questionsArray[arrayIndex].blurb)
+                    .show();
+                triviaGame.correct_answers++;
+                $(".score .status-style")
+                    .html("Correct: " + triviaGame.correct_answers);
             }
             else{
                 // display the splat image
+                $("#qm_image").hide(); // hide question mark
                 $("#game_images")
-                    .attr("src", "assets/images/splat.gif");
-                $("#qm_image").hide();
+                    .attr("src", "assets/images/splat.gif")
+                    .show();
                 // display the blurb about the answer
-                $(".blurb-text").text("WRONG ANSWER");
                 $(".question-text").hide();
+                $(".blurb-text").text("WRONG ANSWER").show();
             }
 
-            if(this.currentquestion === 10)  // we are done
+            if(triviaGame.currentquestion === triviaGame.numberOfQuestions)  // we are done
             {
                 setTimeout(function(){
-                    this.endGame();
+                    triviaGame.endGame();
                 },3 * 1000);
             }
             else
             { // set up for next question
-                this.currentquestion++; // setup for next question
+                triviaGame.currentquestion++; // setup for next question
                 arrayIndex++; // next question in array
                 $('.game-control .btn')
                     .show()
@@ -343,10 +391,15 @@ $(document).ready(function(){
         endGame: function(){
             $("#game_images")
                     .attr("src", "assets/images/gameover.gif");
+
+            $(".blurb-text")
+                .text("GAME OVER! You got " + triviaGame.correct_answers + " correct answer.");
+            $(".choices-Area").empty(); // clear the answer choices area
+
             $('.game-control .btn')
                     .show()
                     .text("New Game")
-                    .one('click', this.startNewGame);
+                    .one('click', triviaGame.restartGame);
         },
 
         setupNextQuestion: function(){
@@ -354,11 +407,13 @@ $(document).ready(function(){
             $("#game_images").hide();  // hide this image
             $("#qm_image").show();  // show question mark image
             $(".blurb-text").hide();
-            $(".question-text").show();
             $(".choices-Area").empty();
             // add buttons for answer choices
+            $(".questions-left .status-style")
+                .html("Question:  " + triviaGame.currentquestion + " of " + triviaGame.numberOfQuestions);
             triviaGame.buildButtons();
             triviaGame.displayQuestion();  // display next question
+            $(".question-text").show();
             // give them a 5 seconds to read question, then
             // display choices and then start timer
             setTimeout(function (){
