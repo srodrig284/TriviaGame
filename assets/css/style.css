@@ -36,7 +36,7 @@ body{
 }
 
 .top_spacing{
-    height: 300px;
+    height: 100px;
 }
 
 .question-text, .blurb-text {
@@ -58,17 +58,22 @@ body{
     color: black;
 }
 
-
 .title_style{
-    margin-top: 222px;
-    margin-left:275px;
+    margin-top: 40px;
+    margin-left: 700px;
+}
+
+#progress-style {
+    color: black;
+    background-color: cadetblue;
+    width: 100%;
 }
 
 #start-btn{
     width: 50%;
     font-size: 3em;
     border: solid;
-    margin-top: 100px;
+    margin-top: 200px;
     margin-left: 200px;
     color: black;
     background-color: #8a0520;
@@ -106,6 +111,7 @@ body{
 
 .row{
     width: auto;
+    margin: 0 auto;
 }
 
 .btn-group-vertical{

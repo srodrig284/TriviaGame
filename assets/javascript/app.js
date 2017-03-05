@@ -166,13 +166,14 @@ $(document).ready(function(){
 
     var questionsArray = [];
     var arrayIndex = 0;
+    var intervalID;
 
 	/* Beginning of the game object */
 	var triviaGame = {
-		timer: 0,
-		numberOfQuestions: 2,
+		timer: 150,
+        timerMax: 135,
+		numberOfQuestions: 5,
 		currentquestion: 1,
-        intervalID: 0,
         correct_answers: 0,
         current_corect_answer:"",
 
@@ -186,8 +187,16 @@ $(document).ready(function(){
 			triviaGame.getRandomArray();
 
             // set initial values
-            // remove the start button
+            // remove the start button from statusBar
             $("#start-btn").remove();
+
+            // set up progress bar
+            $("<div>")
+                .addClass('progress')
+                .append($("<div>")
+                            .addClass('progress-bar')
+                            .attr('id', 'progress-style'))
+                .appendTo("#statusBar");
 
             //***********************************//
             //* Begin setting up the game area  *//
@@ -234,6 +243,7 @@ $(document).ready(function(){
             // display choices and then start timer
             setTimeout(function (){
                 triviaGame.displayChoices();
+                triviaGame.startTimer();
             }, 5 * 1000);
 		},
 
@@ -277,6 +287,7 @@ $(document).ready(function(){
             // display choices and then start timer
             setTimeout(function (){
                 triviaGame.displayChoices();
+                triviaGame.startTimer();
             }, 5 * 1000);
         },
 
@@ -338,9 +349,7 @@ $(document).ready(function(){
         },
 
         checkAnswer: function(){
-            //var userAnswer = this.textContent;
-            // save the correct answer for later comparison
-            //var corectAnswer = this.questionsArray[this.arrayIndex].correct;
+            triviaGame.stopTimer(); // Stop the timer
 
             if(this.textContent === questionsArray[arrayIndex].correct){
                 // display the clapping image
@@ -365,7 +374,7 @@ $(document).ready(function(){
                     .show();
                 // display the blurb about the answer
                 $(".question-text").hide();
-                $(".blurb-text").text("WRONG ANSWER").show();
+                $(".blurb-text").html("WRONG ANSWER!  Correct answer is: <br> " +  questionsArray[arrayIndex].correct).show();
             }
 
             if(triviaGame.currentquestion === triviaGame.numberOfQuestions)  // we are done
@@ -382,9 +391,6 @@ $(document).ready(function(){
                     .show()
                     .text("Next Question")
                     .one('click', triviaGame.setupNextQuestion);
-                /*setTimeout(function(){
-                    this.setupNextQuestion();
-                }, 5 * 1000);*/
             }
         },
 
@@ -418,22 +424,55 @@ $(document).ready(function(){
             // display choices and then start timer
             setTimeout(function (){
                 triviaGame.displayChoices();
+                triviaGame.startTimer();
             }, 5 * 1000);
-        }
+        },
 
-        /*setTimer: function(){
-            //intervalId = setInterval(decrement, 1000);
-            $("<div>")
-                .addClass('progress')
-                .text("time")
-                .appendTo("#statusBar");
-            },
-        */
-        //  The decrement function.
-        /*decrement: function(){
-          //  Decrease number by one.
-          number--;
-      }*/
+        startTimer: function(){
+            triviaGame.timer = 150;
+            intervalID = setInterval(triviaGame.decrement,100);
+        },
+
+        decrement: function(){
+            triviaGame.timer--;
+
+            var timerPercent = (triviaGame.timer/triviaGame.timerMax) * 100;
+
+            //Update Progress Bar
+            $('#progress-style').width(timerPercent + '%');
+
+            if(triviaGame.timer === 0){
+                triviaGame.stopTimer();
+                $("#qm_image").hide(); // hide question mark
+                $("#game_images")
+                    .attr("src", "assets/images/timeout.gif")
+                    .show();
+                // display the blurb about the answer
+                $(".question-text").hide();
+                $(".blurb-text").text("TIMED OUT").show();
+
+                if(triviaGame.currentquestion === triviaGame.numberOfQuestions)  // we are done
+                {
+                    setTimeout(function(){
+                        triviaGame.endGame();
+                    },3 * 1000);
+                }
+                else
+                { // set up for next question
+                    triviaGame.currentquestion++; // setup for next question
+                    arrayIndex++; // next question in array
+                    $('.game-control .btn')
+                        .show()
+                        .text("Next Question")
+                        .one('click', triviaGame.setupNextQuestion);
+                }
+            }
+        },
+
+        stopTimer: function () {
+            clearInterval(intervalID);
+        },
+
 	} /* END gameObject */
 
 
